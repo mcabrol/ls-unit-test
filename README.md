@@ -3,12 +3,16 @@
 
 Run this command in your ft_ls repository:
 ```
-git clone https://github.com/mcabrol/ls_check.git
-mv ls_checker/ls_check.sh .
-rm -rf ls_check
+git clone https://github.com/mcabrol/ls_check.git && cd ls_check
+cp ls_check.sh .. && .. && rm -rf ls_check
 ```
 
-Program in progress:
+For disable the leaks check
+```
+sh ls_check.sh disable-leak
+```
+
+
 - [x] Leaks
 - [ ] Use vimdiff outputs
 - [ ] Execute from another dir
