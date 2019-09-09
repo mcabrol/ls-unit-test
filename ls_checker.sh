@@ -16,6 +16,31 @@ Cyan='\033[0;36m'         # Cyan
 White='\033[0;37m'        # White
 EOC='\033[0m'             # Text Reset
 
+# Check
+if ./ft_ls
+then
+    printf "$Green-> ft_ls found.\n$EOC"
+else
+    printf "$Red-> ft_ls not found.\n$EOC"
+    exit 0
+fi
+
+if valgrind -q ./ft_ls
+then
+    printf "$Green-> Valgrind found.\n$EOC"
+    VAL=TRUE
+else
+    printf "$Red-> Valgrind not found.\n$EOC"
+    VAL=FALSE
+    exit 0
+fi
+
+printf "\n"
+
+if [ "$1" == "disable-leak" ]
+then
+  VAL=FALSE
+fi
 
 # Commands
 cmd=("-l" "-lo" "p0"
@@ -98,12 +123,25 @@ ok=0
 ko=0
 sum=0
 PADDING=35
+TMP=0
+
+for i in "${cmd[@]}"
+do
+  if [ ${#i} -gt ${TMP} ]
+  then
+    TMP=${#i}
+  fi
+done
+
+PADDING=$((TMP + 5))
 
 for opt in "${cmd[@]}"
 do
   DIFF=$(diff <(ls -1 $opt 2>&1) <(./ft_ls -1 $opt 2>&1))
-  LEAKS=$(valgrind --leak-check=full --log-file="leak.log" ./ft_ls -1 $opt 2>&1)
-  BYTES=$(cat leak.log | grep "definitely lost:" | awk {'print $4'})
+  if [ "$VAL" == "TRUE" ]; then
+    LEAKS=$(valgrind --leak-check=full --log-file="leak.log" ./ft_ls -1 $opt 2>&1)
+    BYTES=$(cat leak.log | grep "definitely lost:" | awk {'print $4'})
+  fi
   ((sum++))
   if [ "$DIFF" != "" ]
   then
@@ -111,16 +149,32 @@ do
     SDIFF=$(sdiff <(ls -1 $opt 2>&1) <(./ft_ls -1 $opt 2>&1))
     print_log "$SDIFF" "$opt" "$sum"
     printf "$Cyan$sum\t$Yellow$opt%-*s$Red[KO]$EOC" $((${#opt} - ${PADDING})) ""
-    if [ ${BYTES} != 0 ]; then printf "$Red -> $BYTES bytes leaks$EOC"; fi
+    if [ "$VAL" == "TRUE" ]
+    then
+      if [ ${BYTES} != 0 ]
+      then
+        printf "$Red -> $BYTES bytes leaks$EOC"
+      fi
+    fi
     printf "\n"
   else
     ((ok++))
     printf "$Cyan$sum\t$Yellow$opt%-*s$Green[OK]$EOC" $((${#opt} - ${PADDING})) ""
-    if [ ${BYTES} != 0 ]; then printf "$Red -> $BYTES bytes leaks$EOC"; fi
+    if [ "$VAL" == "TRUE" ]
+    then
+      if [ ${BYTES} != 0 ]
+      then
+        printf "$Red -> $BYTES bytes leaks$EOC"
+      fi
+    fi
     printf "\n"
   fi
 done
 printf "\n$Cyan$ko/$sum failed tests -> $LS/log$EOC\n"
 
+# Cleaning
 rm -rf $DIR
+rm -rf leak.log
+rm -rf ft_ls.dSYM
+
 exit 0
