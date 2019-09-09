@@ -11,8 +11,3 @@ For disable the leaks check:
 sh ls_check.sh disable-leak
 ```
 **For leaks testing, Valgrind required.**
-
-- [x] Leaks
-- [ ] Use vimdiff outputs
-- [x] Execute from path
-- [ ] Deploy for linux
