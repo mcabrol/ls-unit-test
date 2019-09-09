@@ -10,7 +10,7 @@ For disable the leaks check:
 ```
 sh ls_check.sh disable-leak
 ```
-**For leak testing, need Valgrind installed.**
+**For leaks testing, Valgrind required.**
 
 - [x] Leaks
 - [ ] Use vimdiff outputs
