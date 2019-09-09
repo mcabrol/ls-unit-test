@@ -6,7 +6,7 @@
 #    By: mcabrol <mcabrol@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/09 13:36:31 by mcabrol           #+#    #+#              #
-#    Updated: 2019/09/09 13:36:46 by mcabrol          ###   ########.fr        #
+#    Updated: 2019/09/09 18:02:30 by mcabrol          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,8 +17,8 @@ set +o posix
 FTLS=~/Documents/ft_ls/ft_ls
 
 # Log file
-LS=~/Documents/ft_ls
-rm -f $LS/log
+LOG=~/Documents/ft_ls
+rm -f $LOG/log
 
 # Regular Colors
 Black='\033[0;30m'        # Black
@@ -58,53 +58,54 @@ then
 fi
 
 # Commands
-cmd=("-l" "-l /dev" "-lo" "p0" "-laR"
-     "-a" "/" "-l /"
-     "-r" "-l -a -r -t --"
-     "-n" "--/" "-a -  -l--"
-     "-a -l" "-Rlla" "-R -r"
-     "-lll" "-RRRRRRR -t"
-     "-lan" "-- -l -a"
-     "-- ." "-, -l" "# ls"
-     "-R" "-arr" "-R ~/*"
-     "-aaaa" "dir" "-la dir" "-artR dir"
-     "-n" "-lR /dir"
-     "-n /dev"
-     "/Users"
-     "-l /var"
-     "-l /bin"
-     "/tmp"
-     "/dev"
-     "-lr"
-     "-- z" "-" "--" "---" "----" "-------" "- - -"
-     "---"
-     "--y"
-     "-----"
-     "-t -r"
-     "-t /abc"
-     "-1l1"
-     "-"
-     "-lrta"
-     "-xxx-"
-     "/abc ~"
-     "*"
-     "-nln"
-     "-atrltr dossier abc"
-     "-lllllr -l /var/run"
-     "-r -a -n /var/run"
-     "-lllllllllll -- a-")
+cmd=("-l" "-l /Users" "-l /dev" "-l /var/run" "-l /tmp" "-l ~" "-l *" "-la" "-lR /dir"
+     "-t" "-t /dir/abc" "-ta" "-tr" "-lt" "-ltar" "-ltRa" "-lrrrr" "-l -a -a")
+     # "-a" "/" "-l /"
+     # "-r" "-l -a -r -t --"
+     # "-n" "--/" "-a -  -l--"
+     # "-a -l" "-Rlla" "-R -r"
+     # "-lll" "-RRRRRRR -t"
+     # "-lan" "-- -l -a"
+     # "-- ." "-, -l" "# ls"
+     # "-R" "-arr" "-R ~/*"
+     # "-aaaa" "dir" "-la dir" "-artR dir"
+     # "-n" "-lR /dir"
+     # "-n /dev"
+     # "/Users"
+     # "-l /var"
+     # "-l /bin"
+     # "/tmp"
+     # "/dev"
+     # "-lr"
+     # "-- z" "-" "--" "---" "----" "-------" "- - -"
+     # "---"
+     # "--y"
+     # "-----"
+     # "-t -r"
+     # "-t /abc"
+     # "-1l1"
+     # "-"
+     # "-lrta"
+     # "-xxx-"
+     # "/abc ~"
+     # "*"
+     # "-nln"
+     # "-atrltr dossier abc"
+     # "-lllllr -l /var/run"
+     # "-r -a -n /var/run"
+     # "-lllllllllll -- a-")
 
 # Print log
 function print_log () {
-  printf "$Purple[KO] test $sum\n$EOC" >> $LS/log
-  printf "$Yellow$FTLS $opt\n\n$EOC" >> $LS/log
-  printf "$SDIFF\n\n" >> $LS/log
-  printf "for more $Green#vimdiff <(ls -1 $opt) <($FTLS -1 $opt)$EOC\n" >> $LS/log
-  printf "$Blue------------------------\n$EOC" >> $LS/log
+  printf "$Purple[KO] test $sum\n$EOC" >> $LOG/log
+  printf "$Yellow$FTLS $opt\n\n$EOC" >> $LOG/log
+  printf "$SDIFF\n\n" >> $LOG/log
+  printf "for more $Green#vimdiff <(ls -1 $opt) <($FTLS -1 $opt)$EOC\n" >> $LOG/log
+  printf "$Blue------------------------\n$EOC" >> $LOG/log
 }
 
 # Test Dir
-DIR=$LS/dir
+DIR=$LOG/dir
 
 rm -rf $DIR
 mkdir $DIR
@@ -185,11 +186,11 @@ do
     printf "\n"
   fi
 done
-printf "\n$Cyan$ko/$sum failed tests -> $LS/log$EOC\n"
+printf "\n$Cyan$ko/$sum failed tests -> $LOG/log$EOC\n"
 
 # Cleaning
 rm -rf $DIR
-rm -rf leak.log
-rm -rf ft_ls.dSYM
+rm -rf $LOG/leak.log
+rm -rf $LOG/ft_ls.dSYM
 
 exit 0
