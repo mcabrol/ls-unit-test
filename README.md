@@ -7,3 +7,8 @@ git clone https://github.com/mcabrol/ls_check.git
 mv ls_checker/ls_check.sh .
 rm -rf ls_check
 ```
+
+Program in progress:
+- [x] Leaks
+- [ ] Use vimdiff outputs
+- [ ] Execute from another dir
