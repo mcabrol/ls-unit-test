@@ -1,5 +1,20 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    ls_check.sh                                        :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: mcabrol <mcabrol@student.42.fr>            +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2019/09/09 13:36:31 by mcabrol           #+#    #+#              #
+#    Updated: 2019/09/09 13:36:46 by mcabrol          ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 #!/bin/bash
 set +o posix
+
+# Path to ft_ls
+FTLS=~/Documents/ft_ls/ft_ls
 
 # Log file
 LS=~/Documents/ft_ls
@@ -17,7 +32,7 @@ White='\033[0;37m'        # White
 EOC='\033[0m'             # Text Reset
 
 # Check
-if ./ft_ls
+if "$FTLS"
 then
     printf "$Green-> ft_ls found.\n$EOC"
 else
@@ -25,7 +40,7 @@ else
     exit 0
 fi
 
-if valgrind -q ./ft_ls
+if valgrind -q "$FTLS"
 then
     printf "$Green-> Valgrind found.\n$EOC"
     VAL=TRUE
@@ -43,7 +58,7 @@ then
 fi
 
 # Commands
-cmd=("-l" "-lo" "p0"
+cmd=("-l" "-l /dev" "-lo" "p0" "-laR"
      "-a" "/" "-l /"
      "-r" "-l -a -r -t --"
      "-n" "--/" "-a -  -l--"
@@ -82,9 +97,9 @@ cmd=("-l" "-lo" "p0"
 # Print log
 function print_log () {
   printf "$Purple[KO] test $sum\n$EOC" >> $LS/log
-  printf "$Yellow./ft_ls $opt\n\n$EOC" >> $LS/log
+  printf "$Yellow$FTLS $opt\n\n$EOC" >> $LS/log
   printf "$SDIFF\n\n" >> $LS/log
-  printf "for more $Green#vimdiff <(ls -1 $opt) <(./ft_ls -1 $opt)$EOC\n" >> $LS/log
+  printf "for more $Green#vimdiff <(ls -1 $opt) <($FTLS -1 $opt)$EOC\n" >> $LS/log
   printf "$Blue------------------------\n$EOC" >> $LS/log
 }
 
@@ -137,16 +152,16 @@ PADDING=$((TMP + 5))
 
 for opt in "${cmd[@]}"
 do
-  DIFF=$(diff <(ls -1 $opt 2>&1) <(./ft_ls -1 $opt 2>&1))
+  DIFF=$(diff <(ls -1 $opt 2>&1) <($FTLS -1 $opt 2>&1))
   if [ "$VAL" == "TRUE" ]; then
-    LEAKS=$(valgrind --leak-check=full --log-file="leak.log" ./ft_ls -1 $opt 2>&1)
+    LEAKS=$(valgrind --leak-check=full --log-file="leak.log" "$FTLS" -1 $opt 2>&1)
     BYTES=$(cat leak.log | grep "definitely lost:" | awk {'print $4'})
   fi
   ((sum++))
   if [ "$DIFF" != "" ]
   then
     ((ko++))
-    SDIFF=$(sdiff <(ls -1 $opt 2>&1) <(./ft_ls -1 $opt 2>&1))
+    SDIFF=$(sdiff <(ls -1 $opt 2>&1) <($FTLS -1 $opt 2>&1))
     print_log "$SDIFF" "$opt" "$sum"
     printf "$Cyan$sum\t$Yellow$opt%-*s$Red[KO]$EOC" $((${#opt} - ${PADDING})) ""
     if [ "$VAL" == "TRUE" ]
