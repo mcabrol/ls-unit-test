@@ -1,8 +1,8 @@
 **Simple bash script for verify our implementation of ls command.**
 
 Configure exe/log paths:
-```
-![#1589F0]FTLS`#1589F0`=/path/to/ft_ls
+```diff
+FTLS=/path/to/ft_ls
 LOG=/path/to/log
 ```
 
