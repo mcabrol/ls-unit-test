@@ -2,7 +2,7 @@
 
 Configure exe/log paths:
 ```
-FTLS=/path/to/ft_ls
+![#1589F0]FTLS`#1589F0`=/path/to/ft_ls
 LOG=/path/to/log
 ```
 
