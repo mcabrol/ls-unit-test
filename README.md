@@ -1,11 +1,16 @@
-**ls_check**
 **Simple bash script for verify our implementation of ls command.**
 
-For disable the leaks check
+Configure exe/log paths:
+```
+FTLS=/path/to/ft_ls
+LOG=/path/to/log
+```
+
+For disable the leaks check:
 ```
 sh ls_check.sh disable-leak
 ```
-
+**For leak testing, need Valgrind installed.**
 
 - [x] Leaks
 - [ ] Use vimdiff outputs
