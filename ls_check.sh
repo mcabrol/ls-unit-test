@@ -6,7 +6,7 @@
 #    By: mcabrol <mcabrol@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/09 13:36:31 by mcabrol           #+#    #+#              #
-#    Updated: 2019/09/10 18:33:17 by mcabrol          ###   ########.fr        #
+#    Updated: 2019/09/10 19:04:52 by mcabrol          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -58,7 +58,7 @@ then
 fi
 
 # Commands
-cmd=("Makefile" "author src" "--" "-a" "author Makefile src" "-l" "-la" "-l /Users" "-l /dev" "-l /var/run" "-l /tmp" "-l ~" "-l *" "-la" "-lR /dir"
+cmd=("-n Makefile" "author src" "--" "-a" "author Makefile src" "-l" "-la" "-l /Users" "-l /dev" "-l /var/run" "-l /tmp" "-l ~" "-l *" "-la" "-lR /dir"
      "-t" "-t /dir/abc" "-ta" "-tr" "-lt" "-ltar" "-ltRa" "-lrrrr" "-l -a -a")
      # "-a" "/" "-l /"
      # "-r" "-l -a -r -t --"
