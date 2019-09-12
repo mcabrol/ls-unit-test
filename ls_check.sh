@@ -6,7 +6,7 @@
 #    By: mcabrol <mcabrol@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/09 13:36:31 by mcabrol           #+#    #+#              #
-#    Updated: 2019/09/10 19:04:52 by mcabrol          ###   ########.fr        #
+#    Updated: 2019/09/12 18:57:12 by mcabrol          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,10 +14,10 @@
 set +o posix
 
 # Path to ft_ls
-FTLS=~/Documents/ft_ls/ft_ls
+FTLS=~/Documents/nt_ls/ft_ls
 
 # Log file
-LOG=~/Documents/ft_ls
+LOG=~/Documents/nt_ls
 rm -f $LOG/log
 
 # Regular Colors
@@ -58,42 +58,45 @@ then
 fi
 
 # Commands
-cmd=("-n Makefile" "author src" "--" "-a" "author Makefile src" "-l" "-la" "-l /Users" "-l /dev" "-l /var/run" "-l /tmp" "-l ~" "-l *" "-la" "-lR /dir"
-     "-t" "-t /dir/abc" "-ta" "-tr" "-lt" "-ltar" "-ltRa" "-lrrrr" "-l -a -a")
-     # "-a" "/" "-l /"
-     # "-r" "-l -a -r -t --"
-     # "-n" "--/" "-a -  -l--"
-     # "-a -l" "-Rlla" "-R -r"
-     # "-lll" "-RRRRRRR -t"
-     # "-lan" "-- -l -a"
-     # "-- ." "-, -l" "# ls"
-     # "-R" "-arr" "-R ~/*"
-     # "-aaaa" "dir" "-la dir" "-artR dir"
-     # "-n" "-lR /dir"
-     # "-n /dev"
-     # "/Users"
-     # "-l /var"
-     # "-l /bin"
-     # "/tmp"
-     # "/dev"
-     # "-lr"
-     # "-- z" "-" "--" "---" "----" "-------" "- - -"
-     # "---"
-     # "--y"
-     # "-----"
-     # "-t -r"
-     # "-t /abc"
-     # "-1l1"
-     # "-"
-     # "-lrta"
-     # "-xxx-"
-     # "/abc ~"
-     # "*"
-     # "-nln"
-     # "-atrltr dossier abc"
-     # "-lllllr -l /var/run"
-     # "-r -a -n /var/run"
-     # "-lllllllllll -- a-")
+cmd=("-n ~" "-rn ~" "-n /tmp"
+     "-R" "-R dir"
+     "-R ~" "-Ra ~" "-Rr ~" "-Rt ~" "-Rl" "-Rartl"
+     "-n Makefile" "author src" "--" "-a" "author Makefile src" "-l" "-la" "-l /Users" "-l /dev" "-l /var/run" "-l /tmp" "-l ~" "-l *" "-la" "-lR /dir"
+     "-t" "-t /dir/abc" "-ta" "-tr" "-lt" "-ltar" "-ltRa" "-lrrrr" "-l -a -a"
+     "-a" "/" "-l /"
+     "-r" "-l -a -r -t --"
+     "-n" "--/" "-a -  -l--"
+     "-a -l" "-Rlla" "-R -r"
+     "-lll" "-RRRRRRR -t"
+     "-lan" "-- -l -a"
+     "-- ." "-, -l" "# ls"
+     "-R" "-arr" "-R ~/*"
+     "-aaaa" "dir" "-la dir" "-artR dir"
+     "-n" "-lR /dir"
+     "-n /dev"
+     "/Users"
+     "-l /var"
+     "-l /bin"
+     "/tmp"
+     "/dev"
+     "-lr"
+     "-- z" "-" "--" "---" "----" "-------" "- - -"
+     "---"
+     "--y"
+     "-----"
+     "-t -r"
+     "-t /abc"
+     "-1l1"
+     "-"
+     "-lrta"
+     "-xxx-"
+     "/abc ~"
+     "*"
+     "-nln"
+     "-atrltr dossier abc"
+     "-lllllr -l /var/run"
+     "-r -a -n /var/run"
+     "-lllllllllll -- a-")
 
 # Print log
 function print_log () {
@@ -152,7 +155,7 @@ PADDING=$((TMP + 5))
 
 for opt in "${cmd[@]}"
 do
-  DIFF=$(diff <(ls -1 $opt 2>&1) <($FTLS -1 $opt 2>&1))
+  DIFF=$(diff <(ls $opt 2>&1) <($FTLS $opt 2>&1))
   if [ "$VAL" == "TRUE" ]; then
     LEAKS=$(valgrind --leak-check=full --log-file="leak.log" "$FTLS" -1 $opt 2>&1)
     BYTES=$(cat leak.log | grep "definitely lost:" | awk {'print $4'})
@@ -162,14 +165,17 @@ do
   if [ "$DIFF" != "" ]
   then
     ((ko++))
-    SDIFF=$(sdiff <(ls -1 $opt 2>&1) <($FTLS -1 $opt 2>&1))
+    SDIFF=$(sdiff <(ls $opt 2>&1) <($FTLS $opt 2>&1))
     print_log "$opt" "$sum"
     printf "$Cyan$sum\t$Yellow$opt%-*s$Red[KO]$EOC" $((${#opt} - ${PADDING})) ""
     if [ "$VAL" == "TRUE" ]
     then
       if [ "$BYTES" != 0 ]
       then
+        printf "$Red [KO]$EOC"
         printf "$Red -> $BYTES bytes leaks$EOC"
+      else
+        printf "$Green [OK]$EOC"
       fi
     fi
     printf "\n"
@@ -180,7 +186,10 @@ do
     then
       if [ "$BYTES" != "0" ]
       then
+        printf "$Red [KO]$EOC"
         printf "$Red -> $BYTES bytes leaks$EOC"
+      else
+        printf "$Green [OK]$EOC"
       fi
     fi
     printf "\n"
