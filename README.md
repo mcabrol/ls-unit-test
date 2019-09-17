@@ -1,3 +1,5 @@
+![ls-unit-test](https://martincabrol.be/public/ls-unit-test.png)
+
 # ls-unit-test
 
 **Simple bash script for verify our implementation of ls command.**
