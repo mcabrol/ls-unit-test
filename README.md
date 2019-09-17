@@ -1,13 +1,21 @@
+# ls-unit-test
+
 **Simple bash script for verify our implementation of ls command.**
 
-Configure exe/log paths:
+Configure binary path:
 ```
 FTLS=/path/to/ft_ls
-LOG=/path/to/log
+```
+
+Set log output path:
+```
+LOG=/path/log/output/
 ```
 
 For disable the leaks check:
 ```
-sh ls_check.sh disable-leak
+sh run.sh disable-leak
 ```
 **For leaks testing, Valgrind required.**
+
+![ls-unit-test](https://martincabrol.be/public/ls-unit-test.png)
