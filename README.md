@@ -19,3 +19,5 @@ For disable the leaks check:
 sh run.sh disable-leak
 ```
 **For leaks testing, Valgrind required.**
+
+![ls-unit-test](https://martincabrol.be/public/ls-unit-test.png)
