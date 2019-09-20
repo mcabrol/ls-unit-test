@@ -1,20 +1,24 @@
 # **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
-#    ls_check.sh                                        :+:      :+:    :+:    #
+#    run.sh                                             :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
 #    By: mcabrol <mcabrol@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/09 13:36:31 by mcabrol           #+#    #+#              #
-#    Updated: 2019/09/12 18:57:12 by mcabrol          ###   ########.fr        #
+#    Updated: 2019/09/20 17:23:48 by mcabrol          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 #!/bin/bash
 set +o posix
 
+# Flags
+N=TRUE
+
 # Path to ft_ls
 FTLS=~/Documents/nt_ls/ft_ls
+ROOT=$(dirname $FTLS)
 
 # Log file
 LOG=~/Documents/nt_ls
@@ -31,37 +35,54 @@ Cyan='\033[0;36m'         # Cyan
 White='\033[0;37m'        # White
 EOC='\033[0m'             # Text Reset
 
+# Set up option
+
+if [ "$1" == "-leak" ]
+then
+  VAL=TRUE
+else
+  VAL=FALSE
+fi
+
 # Check
 if "$FTLS"
 then
     printf "$Green-> ft_ls found.\n$EOC"
 else
     printf "$Red-> ft_ls not found.\n$EOC"
-    exit 0
+    make -C $ROOT
+    if "$FTLS"
+    then
+      printf "$Green-> ft_ls found.\n$EOC"
+    else
+      printf "$Red-> ft_ls not found.\n$EOC"
+      exit 0
+    fi
 fi
 
-if valgrind -q "$FTLS"
+if [ "$1" == "-leak" ]
 then
-    printf "$Green-> Valgrind found.\n$EOC"
-    VAL=TRUE
+  if valgrind -q "$FTLS"
+  then
+      printf "$Green-> Valgrind found.\n$EOC"
+      VAL=TRUE
+  else
+      printf "$Red-> Valgrind not found.\n$EOC"
+      VAL=FALSE
+  fi
 else
-    printf "$Red-> Valgrind not found.\n$EOC"
-    VAL=FALSE
-    exit 0
+  VAL=FALSE
 fi
 
 printf "\n"
 
-if [ "$1" == "disable-leak" ]
-then
-  VAL=FALSE
-fi
-
 # Commands
-cmd=("-n ~" "-rn ~" "-n /tmp"
+cmd=("-z" "/System/Library/"
+     "-n ~" "-rn ~" "-n /tmp"
      "-R" "-R dir"
      "-R ~" "-Ra ~" "-Rr ~" "-Rt ~" "-Rl" "-Rartl"
-     "-n Makefile" "author src" "--" "-a" "author Makefile src" "-l" "-la" "-l /Users" "-l /dev" "-l /var/run" "-l /tmp" "-l ~" "-l *" "-la" "-lR /dir"
+     "-n Makefile" "author src" "--" "-a" "author Makefile src" "-l" "-la"
+     "-l /Users" "-l /dev" "-l /var/run" "-l /tmp" "-l ~" "-l *" "-la" "-lR /dir"
      "-t" "-t /dir/abc" "-ta" "-tr" "-lt" "-ltar" "-ltRa" "-lrrrr" "-l -a -a"
      "-a" "/" "-l /"
      "-r" "-l -a -r -t --"
@@ -73,7 +94,6 @@ cmd=("-n ~" "-rn ~" "-n /tmp"
      "-R" "-arr" "-R ~/*"
      "-aaaa" "dir" "-la dir" "-artR dir"
      "-n" "-lR /dir"
-     "-n /dev"
      "/Users"
      "-l /var"
      "-l /bin"
@@ -89,11 +109,10 @@ cmd=("-n ~" "-rn ~" "-n /tmp"
      "-1l1"
      "-"
      "-lrta"
-     "-xxx-"
+     "-llz"
      "/abc ~"
      "*"
      "-nln"
-     "-atrltr dossier abc"
      "-lllllr -l /var/run"
      "-r -a -n /var/run"
      "-lllllllllll -- a-")
@@ -140,7 +159,6 @@ touch $DIR/abc/kk $DIR/abc/S $DIR/abc/4 $DIR/abc/wefiweofhwoefhgwiuegf
 ok=0
 ko=0
 sum=0
-PADDING=35
 TMP=0
 
 for i in "${cmd[@]}"
@@ -155,7 +173,7 @@ PADDING=$((TMP + 5))
 
 for opt in "${cmd[@]}"
 do
-  DIFF=$(diff <(ls $opt 2>&1) <($FTLS $opt 2>&1))
+  DIFF=$(diff <(ls -1 $opt 2>&1) <($FTLS -1 $opt 2>&1))
   if [ "$VAL" == "TRUE" ]; then
     LEAKS=$(valgrind --leak-check=full --log-file="leak.log" "$FTLS" -1 $opt 2>&1)
     BYTES=$(cat leak.log | grep "definitely lost:" | awk {'print $4'})
@@ -165,9 +183,9 @@ do
   if [ "$DIFF" != "" ]
   then
     ((ko++))
-    SDIFF=$(sdiff <(ls $opt 2>&1) <($FTLS $opt 2>&1))
+    SDIFF=$(sdiff <(ls -1 $opt 2>&1) <($FTLS -1 $opt 2>&1))
     print_log "$opt" "$sum"
-    printf "$Cyan$sum\t$Yellow$opt%-*s$Red[KO]$EOC" $((${#opt} - ${PADDING})) ""
+    printf "$Cyan$sum\t$Yellow ./ft_ls $opt%-*s$Red[KO]$EOC" $((${#opt} - ${PADDING})) ""
     if [ "$VAL" == "TRUE" ]
     then
       if [ "$BYTES" != 0 ]
@@ -181,7 +199,7 @@ do
     printf "\n"
   else
     ((ok++))
-    printf "$Cyan$sum\t$Yellow$opt%-*s$Green[OK]$EOC" $((${#opt} - ${PADDING})) ""
+    printf "$Cyan$sum\t$Yellow ./ft_ls $opt%-*s$Green[OK]$EOC" $((${#opt} - ${PADDING})) ""
     if [ "$VAL" == "TRUE" ]
     then
       if [ "$BYTES" != "0" ]

@@ -2,6 +2,8 @@
 
 **Simple bash script for verify our implementation of ls command.**
 
+## Configure
+
 Configure binary path:
 ```
 FTLS=/path/to/ft_ls
@@ -12,10 +14,18 @@ Set log output path:
 LOG=/path/log/output/
 ```
 
-For disable the leaks check:
+# Run test
+
+Start the shell script:
 ```
-sh run.sh disable-leak
+./run.sh
 ```
+
+For enable the leaks check:
+```
+./run.sh -leak
+```
+
 **For leaks testing, Valgrind required.**
 
 ![ls-unit-test](https://martincabrol.be/public/ls-unit-test.png)
