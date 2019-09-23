@@ -27,5 +27,3 @@ For enable the leaks check:
 ```
 
 **For leaks testing, Valgrind required.**
-
-![ls-unit-test](https://martincabrol.be/public/ls-unit-test.png)
