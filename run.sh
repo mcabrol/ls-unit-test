@@ -6,7 +6,7 @@
 #    By: mcabrol <mcabrol@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/09 13:36:31 by mcabrol           #+#    #+#              #
-#    Updated: 2019/09/23 17:13:00 by mcabrol          ###   ########.fr        #
+#    Updated: 2019/09/23 18:15:23 by mcabrol          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -242,8 +242,8 @@ then
   HIFILES=$(echo "$HFILES" | wc -l | awk '{print $1}')
   TOTALFILES=$((${CIFILES} + ${HIFILES}))
   norminette $HFILES >> norm.log
-  norminette $CFILES >> norm.log
   echo -ne '#############             (66%)\r'
+  norminette $CFILES >> norm.log
   if [ -s norm.log ]
   then
     echo -ne '#######################   (100%)\r'
