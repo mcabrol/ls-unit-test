@@ -6,7 +6,7 @@
 #    By: mcabrol <mcabrol@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/09 13:36:31 by mcabrol           #+#    #+#              #
-#    Updated: 2019/09/23 14:15:20 by mcabrol          ###   ########.fr        #
+#    Updated: 2019/09/23 17:13:00 by mcabrol          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,6 +27,7 @@ ROOT=$(dirname $FTLS)
 # Log file
 LOG=~/Documents/nt_ls
 rm -f $LOG/log
+rm -f norm.log
 
 # Regular Colors
 Black='\033[0;30m'        # Black
@@ -90,7 +91,10 @@ fi
 printf "\n"
 
 # Commands
-cmd=("-z" "/System/Library/"
+cmd=("-a" "-l" "/dev/tmp"
+     "-R" "-" "/Library/" "/etc/resolv.conf"
+     "-a /Users/" "-lat /dir" "-la /dev/tmp"
+     "-z" "/System/Library/"
      "-n ~" "-rn ~" "-n /tmp"
      "-R" "-R dir"
      "-R ~" "-Ra ~" "-Rr ~" "-Rt ~" "-Rl" "-Rartl"
@@ -124,7 +128,6 @@ cmd=("-z" "/System/Library/"
      "-lrta"
      "-llz"
      "/abc ~"
-     "*"
      "-nln"
      "-lllllr -l /var/run"
      "-r -a -n /var/run"
@@ -232,17 +235,25 @@ printf "\n$Cyan$ko/$sum failed tests -> $LOG/log$EOC\n"
 # Norminette
 if [ "$NORM" == "TRUE" ]
 then
+  echo -ne '#####                     (33%)\r'
   CFILES=$(find $ROOT -type f -name "*.c")
   HFILES=$(find $ROOT -type f -name "*.h")
   CIFILES=$(echo "$CFILES" | wc -l | awk '{print $1}')
   HIFILES=$(echo "$HFILES" | wc -l | awk '{print $1}')
   TOTALFILES=$((${CIFILES} + ${HIFILES}))
-  norminette $FILES >> norm.log
+  norminette $HFILES >> norm.log
+  norminette $CFILES >> norm.log
+  echo -ne '#############             (66%)\r'
   if [ -s norm.log ]
   then
-    printf "$Cyan$TOTALFILES files ($CIFILES .c, $HIFILES .h)\t$Yellow Norminette%-*s$Red[KO]$EOC" $((${#opt} - ${PADDING})) ""
+    echo -ne '#######################   (100%)\r'
+    echo -ne '\n'
+    printf "$Cyan$TOTALFILES files ($CIFILES .c, $HIFILES .h)\t$Yellow Norminette%-*s$Red[KO]$EOC\n" $((${#opt} - ${PADDING})) ""
+    cat norm.log | grep Error -B1
   else
-    printf "$Cyan$TOTALFILES files ($CIFILES .c, $HIFILES .h)\t$Yellow Norminette%-*s$Green[OK]$EOC" $((${#opt} - ${PADDING})) ""
+    echo -ne '#######################   (100%)\r'
+    echo -ne '\n'
+    printf "$Cyan$TOTALFILES files ($CIFILES .c, $HIFILES .h)\t$Yellow Norminette%-*s$Green[OK]$EOC\n" $((${#opt} - ${PADDING})) ""
   fi
 fi
 
