@@ -6,15 +6,19 @@
 #    By: mcabrol <mcabrol@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/09 13:36:31 by mcabrol           #+#    #+#              #
-#    Updated: 2019/09/20 17:23:48 by mcabrol          ###   ########.fr        #
+#    Updated: 2019/09/23 14:15:20 by mcabrol          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 #!/bin/bash
 set +o posix
 
+# Update
+UP=$(git pull)
+
 # Flags
 N=TRUE
+NORM=FALSE
 
 # Path to ft_ls
 FTLS=~/Documents/nt_ls/ft_ls
@@ -74,6 +78,15 @@ else
   VAL=FALSE
 fi
 
+if norminette
+then
+  printf "$Green-> Norminette found.\n$EOC"
+  NORM=TRUE
+else
+  printf "$Red-> Norminette not found.\n$EOC"
+  NORM=FALSE
+fi
+
 printf "\n"
 
 # Commands
@@ -121,6 +134,7 @@ cmd=("-z" "/System/Library/"
 function print_log () {
   printf "$Purple[KO] test $sum\n$EOC" >> $LOG/log
   printf "$Yellow$FTLS $opt\n\n$EOC" >> $LOG/log
+  printf "$SDIFF\n\n" >> $LOG/log
   printf "for more $Green#vimdiff <(ls -1 $opt) <($FTLS -1 $opt)$EOC\n" >> $LOG/log
   printf "$Blue------------------------\n$EOC" >> $LOG/log
 }
@@ -184,7 +198,7 @@ do
   then
     ((ko++))
     SDIFF=$(sdiff <(ls -1 $opt 2>&1) <($FTLS -1 $opt 2>&1))
-    print_log "$opt" "$sum"
+    print_log "$opt" "$sum" "$SDIFF"
     printf "$Cyan$sum\t$Yellow ./ft_ls $opt%-*s$Red[KO]$EOC" $((${#opt} - ${PADDING})) ""
     if [ "$VAL" == "TRUE" ]
     then
@@ -214,6 +228,25 @@ do
   fi
 done
 printf "\n$Cyan$ko/$sum failed tests -> $LOG/log$EOC\n"
+
+# Norminette
+if [ "$NORM" == "TRUE" ]
+then
+  CFILES=$(find $ROOT -type f -name "*.c")
+  HFILES=$(find $ROOT -type f -name "*.h")
+  CIFILES=$(echo "$CFILES" | wc -l | awk '{print $1}')
+  HIFILES=$(echo "$HFILES" | wc -l | awk '{print $1}')
+  TOTALFILES=$((${CIFILES} + ${HIFILES}))
+  norminette $FILES >> norm.log
+  if [ -s norm.log ]
+  then
+    printf "$Cyan$TOTALFILES files ($CIFILES .c, $HIFILES .h)\t$Yellow Norminette%-*s$Red[KO]$EOC" $((${#opt} - ${PADDING})) ""
+  else
+    printf "$Cyan$TOTALFILES files ($CIFILES .c, $HIFILES .h)\t$Yellow Norminette%-*s$Green[OK]$EOC" $((${#opt} - ${PADDING})) ""
+  fi
+fi
+
+printf "\n"
 
 # Cleaning
 rm -rf $DIR
