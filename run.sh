@@ -21,11 +21,11 @@ N=TRUE
 NORM=FALSE
 
 # Path to ft_ls
-FTLS=~/Documents/nt_ls/ft_ls
+FTLS=~/Documents/ft_ls/ls
 ROOT=$(dirname $FTLS)
 
 # Log file
-LOG=~/Documents/nt_ls
+LOG=$ROOT
 rm -f $LOG/log
 rm -f norm.log
 
@@ -79,19 +79,36 @@ else
   VAL=FALSE
 fi
 
-if norminette
-then
-  printf "$Green-> Norminette found.\n$EOC"
-  NORM=TRUE
-else
-  printf "$Red-> Norminette not found.\n$EOC"
-  NORM=FALSE
-fi
+# if norminette
+# then
+#   printf "$Green-> Norminette found.\n$EOC"
+#   NORM=TRUE
+# else
+#   printf "$Red-> Norminette not found.\n$EOC"
+#   NORM=FALSE
+# fi
+
+NORM=FALSE
 
 printf "\n"
 
 # Commands
-cmd=("-a" "-l" "/dev/tmp"
+cmd=("" "xxx" "dir" "dir xxx" "dir/A/fd dir/B" "dir/A dir/B dir/A/fd" "dir/A dir/B/re dir/abc/129 dir/abc" "dir/A dir/B/xx dir/abc/129 xxx"
+	 "-R " "-R xxx" "-R dir" "-R dir xxx" "-R dir/A/fd dir/B" "-R dir/A dir/B dir/A/fd" "-R dir/A dir/B/re dir/abc/129 dir/abc" "-R dir/A dir/B/xx dir/abc/129 xxx"
+	 "-l " "-l xxx" "-l dir" "-l dir xxx" "-l dir/A/fd dir/B" "-l dir/A dir/B dir/A/fd" "-l dir/A dir/B/re dir/abc/129 dir/abc" "-l dir/A dir/B/xx dir/abc/129 xxx"
+	 "-a " "-a xxx" "-a dir" "-a dir xxx" "-a dir/A/fd dir/B" "-a dir/A dir/B dir/A/fd" "-a dir/A dir/B/re dir/abc/129 dir/abc" "-a dir/A dir/B/xx dir/abc/129 xxx"
+	 "-r " "-r xxx" "-r dir" "-r dir xxx" "-r dir/A/fd dir/B" "-r dir/A dir/B dir/A/fd" "-r dir/A dir/B/re dir/abc/129 dir/abc" "-r dir/A dir/B/xx dir/abc/129 xxx"
+	 "-t " "-t xxx" "-t dir" "-t dir xxx" "-t dir/A/fd dir/B" "-t dir/A dir/B dir/A/fd" "-t dir/A dir/B/re dir/abc/129 dir/abc" "-t dir/A dir/B/xx dir/abc/129 xxx"
+	 "-n " "-n xxx" "-n dir" "-n dir xxx" "-n dir/A/fd dir/B" "-n dir/A dir/B dir/A/fd" "-n dir/A dir/B/re dir/abc/129 dir/abc" "-n dir/A dir/B/xx dir/abc/129 xxx"
+	 "-Rlart " "-Rlart xxx" "-Rlart dir" "-Rlart dir xxx" "-Rlart dir/A/fd dir/B" "-Rlart dir/A dir/B dir/A/fd" "-Rlart dir/A dir/B/re dir/abc/129 dir/abc" "-Rlart dir/A dir/B/xx dir/abc/129 xxx"
+	 "-tRlar " "-tRlar xxx" "-tRlar dir" "-tRlar dir xxx" "-tRlar dir/A/fd dir/B" "-tRlar dir/A dir/B dir/A/fd" "-tRlar dir/A dir/B/re dir/abc/129 dir/abc" "-tRlar dir/A dir/B/xx dir/abc/129 xxx"
+	 "-Rlrta " "-Rlrta xxx" "-Rlrta dir" "-Rlrta dir xxx" "-Rlrta dir/A/fd dir/B" "-Rlrta dir/A dir/B dir/A/fd" "-Rlrta dir/A dir/B/re dir/abc/129 dir/abc" "-Rlrta dir/A dir/B/xx dir/abc/129 xxx"
+	 "-t dir/A dir/B dir/A/fd"
+	 "-r dir/A dir/B dir/A/fd"
+	 "-rt dir/A dir/B dir/A/fd"
+	 "-tr dir/A dir/B dir/A/fd"
+	 "-lR ."
+	 "-a" "-l" "/dev/tmp"
      "-R" "-" "/Library/" "/etc/resolv.conf"
      "-a /Users/" "-lat /dir" "-la /dev/tmp"
      "-z" "/System/Library/"
@@ -131,19 +148,20 @@ cmd=("-a" "-l" "/dev/tmp"
      "-nln"
      "-lllllr -l /var/run"
      "-r -a -n /var/run"
-     "-lllllllllll -- a-")
+     "-lllllllllll -- a-"
+	 )
 
 # Print log
 function print_log () {
   printf "$Purple[KO] test $sum\n$EOC" >> $LOG/log
   printf "$Yellow$FTLS $opt\n\n$EOC" >> $LOG/log
-  printf "$SDIFF\n\n" >> $LOG/log
-  printf "for more $Green#vimdiff <(ls -1 $opt) <($FTLS -1 $opt)$EOC\n" >> $LOG/log
+  printf " $SDIFF\n\n" >> $LOG/log
+  printf "for more $Green#vimdiff <(ls $opt) <($FTLS $opt)$EOC\n" >> $LOG/log
   printf "$Blue------------------------\n$EOC" >> $LOG/log
 }
 
 # Test Dir
-DIR=$LOG/dir
+DIR=dir
 
 rm -rf $DIR
 mkdir $DIR
@@ -152,13 +170,20 @@ mkdir $DIR/1 $DIR/2 $DIR/3 $DIR/A $DIR/B $DIR/C
 mkdir $DIR/abc
 mkfifo $DIR/fifo
 mkfile -n 512k $DIR/xyz
-
-touch -t 202003201000.10 $DIR/A/fd
-touch -t 198010102045.33 $DIR/A/opt
-touch -t 199912312359.59 $DIR/A/yr
-touch -t 197012312359.59 $DIR/B/re
+mkdir $DIR/dir{1..5} $DIR/.hdir{1..5}
+touch $DIR/dir1/file{1..5} $DIR/dir1/.hfile{1..5}
+touch $DIR/.hdir1/file{1..5} $DIR/.hdir1/.hfile{1..5}
+touch $DIR/.hdir1/file{1..5} $DIR/.hdir1/.hfile{1..5}
+touch $DIR/k && ln -s $DIR/k $DIR/symlink
+touch -amt 194010291036.32 $DIR/P
+chmod -R +a "group:_www allow list,add_file,search,add_subdirectory,delete_child,readattr,writeattr,readextattr,writeextattr,readsecurity,file_inherit,directory_inherit" $DIR/p
+touch -amt 999912312459.59 $DIR/l
+chmod +t $DIR/l
+touch -amt 202003201000.10 $DIR/A/fd
+touch -amt 198010102045.33 $DIR/A/opt
+touch -amt 199912312359.59 $DIR/A/yr
+touch -amt 197012312359.59 $DIR/B/re
 touch $DIR/B/.t $DIR/B/.t $DIR/B/.f
-chmod 555 $DIR/A/*
 chmod 754 $DIR/B/*
 chmod 737 $DIR/C
 chmod 777 $DIR/abc
@@ -167,10 +192,9 @@ touch $DIR/abc/aa $DIR/abc/L $DIR/abc/129
 touch $DIR/abc/bb $DIR/abc/R $DIR/abc/23
 touch $DIR/abc/cc $DIR/abc/ZZ $DIR/abc/4555
 touch $DIR/abc/dd $DIR/abc/B $DIR/abc/532
-touch $DIR/abc/xx $DIR/abc/A $DIR/abc/1 $DIR/abc/uwefhwehfoweihfifwefhwv
-touch $DIR/abc/gg $DIR/abc/V $DIR/abc/0 $DIR/abc/iwejoweihfwoehfwiegg
-touch $DIR/abc/kk $DIR/abc/S $DIR/abc/4 $DIR/abc/wefiweofhwoefhgwiuegf
-
+touch $DIR/abc/xx $DIR/abc/A $DIR/abc/1 $DIR/abc/uwefhwehfoweihfifwefhwvwefiweofhwoefhgwiuegfwefiweofhwoefhgwiuegfwefiweofhwoefhgwiuegf
+touch $DIR/abc/gg $DIR/abc/V $DIR/abc/0 $DIR/abc/iwejoweihfwoehfwieggwefiweofhwoefhgwiuegfwefiweofhwoefhgwiuegfwefiweofhwoefhgwiuegf
+touch $DIR/abc/kk $DIR/abc/S $DIR/abc/4 $DIR/abc/wefiweofhwoefhgwiuegfwefiweofhwoefhgwiuegfwefiweofhwoefhgwiuegfwefiweofhwoefhgwiuegf
 
 # Count
 ok=0
@@ -190,7 +214,7 @@ PADDING=$((TMP + 5))
 
 for opt in "${cmd[@]}"
 do
-  DIFF=$(diff <(ls -1 $opt 2>&1) <($FTLS -1 $opt 2>&1))
+  DIFF=$(diff -b <(ls $opt 2>&1) <($FTLS $opt 2>&1))
   if [ "$VAL" == "TRUE" ]; then
     LEAKS=$(valgrind --leak-check=full --log-file="leak.log" "$FTLS" -1 $opt 2>&1)
     BYTES=$(cat leak.log | grep "definitely lost:" | awk {'print $4'})
@@ -200,7 +224,7 @@ do
   if [ "$DIFF" != "" ]
   then
     ((ko++))
-    SDIFF=$(sdiff <(ls -1 $opt 2>&1) <($FTLS -1 $opt 2>&1))
+    SDIFF=$(sdiff <(ls $opt 2>&1) <($FTLS $opt 2>&1))
     print_log "$opt" "$sum" "$SDIFF"
     printf "$Cyan$sum\t$Yellow ./ft_ls $opt%-*s$Red[KO]$EOC" $((${#opt} - ${PADDING})) ""
     if [ "$VAL" == "TRUE" ]
@@ -260,7 +284,7 @@ fi
 printf "\n"
 
 # Cleaning
-rm -rf $DIR
+# rm -rf $DIR
 rm -rf $LOG/leak.log
 rm -rf $LOG/ft_ls.dSYM
 
