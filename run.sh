@@ -6,7 +6,7 @@
 #    By: mcabrol <mcabrol@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/09/09 13:36:31 by mcabrol           #+#    #+#              #
-#    Updated: 2019/09/23 18:15:23 by mcabrol          ###   ########.fr        #
+#    Updated: 2019/09/27 20:07:44 by mcabrol          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ N=TRUE
 NORM=FALSE
 
 # Path to ft_ls
-FTLS=~/Documents/ft_ls/ft_ls
+FTLS=~/Documents/nt_ls/ft_ls
 ROOT=$(dirname $FTLS)
 
 # Log file
@@ -95,35 +95,42 @@ FTLS=$ROOT/ls
 printf "\n"
 
 # Commands
-cmd=(" " "xxx" "dir" "dir xxx" "dir/A/fd dir/B" "dir/A dir/B dir/A/fd" "dir/A dir/B/re dir/abc/129 dir/abc" "dir/A dir/B/xx dir/abc/129 xxx"
-	 "-R " "-R xxx" "-R dir" "-R dir xxx" "-R dir/A/fd dir/B" "-R dir/A dir/B dir/A/fd" "-R dir/A dir/B/re dir/abc/129 dir/abc" "-R dir/A dir/B/xx dir/abc/129 xxx"
-	 "-l " "-l xxx" "-l dir" "-l dir xxx" "-l dir/A/fd dir/B" "-l dir/A dir/B dir/A/fd" "-l dir/A dir/B/re dir/abc/129 dir/abc" "-l dir/A dir/B/xx dir/abc/129 xxx"
-	 "-a " "-a xxx" "-a dir" "-a dir xxx" "-a dir/A/fd dir/B" "-a dir/A dir/B dir/A/fd" "-a dir/A dir/B/re dir/abc/129 dir/abc" "-a dir/A dir/B/xx dir/abc/129 xxx"
-	 "-r " "-r xxx" "-r dir" "-r dir xxx" "-r dir/A/fd dir/B" "-r dir/A dir/B dir/A/fd" "-r dir/A dir/B/re dir/abc/129 dir/abc" "-r dir/A dir/B/xx dir/abc/129 xxx"
-	 "-t " "-t xxx" "-t dir" "-t dir xxx" "-t dir/A/fd dir/B" "-t dir/A dir/B dir/A/fd" "-t dir/A dir/B/re dir/abc/129 dir/abc" "-t dir/A dir/B/xx dir/abc/129 xxx"
-	 "-n " "-n xxx" "-n dir" "-n dir xxx" "-n dir/A/fd dir/B" "-n dir/A dir/B dir/A/fd" "-n dir/A dir/B/re dir/abc/129 dir/abc" "-n dir/A dir/B/xx dir/abc/129 xxx"
-	 "-Rlart " "-Rlart xxx" "-Rlart dir" "-Rlart dir xxx" "-Rlart dir/A/fd dir/B" "-Rlart dir/A dir/B dir/A/fd" "-Rlart dir/A dir/B/re dir/abc/129 dir/abc" "-Rlart dir/A dir/B/xx dir/abc/129 xxx"
-	 "-tRlar " "-tRlar xxx" "-tRlar dir" "-tRlar dir xxx" "-tRlar dir/A/fd dir/B" "-tRlar dir/A dir/B dir/A/fd" "-tRlar dir/A dir/B/re dir/abc/129 dir/abc" "-tRlar dir/A dir/B/xx dir/abc/129 xxx"
-	 "-Rlrta " "-Rlrta xxx" "-Rlrta dir" "-Rlrta dir xxx" "-Rlrta dir/A/fd dir/B" "-Rlrta dir/A dir/B dir/A/fd" "-Rlrta dir/A dir/B/re dir/abc/129 dir/abc" "-Rlrta dir/A dir/B/xx dir/abc/129 xxx"
-	 "-Rlrtan " "-Rlrtan xxx" "-Rlrtan dir" "-Rlrtan dir xxx" "-Rlrtan dir/A/fd dir/B" "-Rlrtan dir/A dir/B dir/A/fd" "-Rlrtan dir/A dir/B/re dir/abc/129 dir/abc" "-Rlrtan dir/A dir/B/xx dir/abc/129 xxx"
+cmd=(" " "xxx" "dir" "dir dir" "dir xxx" "dir/A/fd dir/B" "dir/A dir/B dir/A/fd" "dir/A dir/B/re dir/abc/129 dir/abc" "dir/A dir/B/xx dir/abc/129 xxx"
+	 "-R " "-R xxx" "dir dir" "-R dir" "-R dir xxx" "-R dir/A/fd dir/B" "-R dir/A dir/B dir/A/fd" "-R dir/A dir/B/re dir/abc/129 dir/abc" "-R dir/A dir/B/xx dir/abc/129 xxx"
+	 "-l " "-l xxx" "dir dir" "-l dir" "-l dir xxx" "-l dir/A/fd dir/B" "-l dir/A dir/B dir/A/fd" "-l dir/A dir/B/re dir/abc/129 dir/abc" "-l dir/A dir/B/xx dir/abc/129 xxx"
+	 "-a " "-a xxx" "dir dir" "-a dir" "-a dir xxx" "-a dir/A/fd dir/B" "-a dir/A dir/B dir/A/fd" "-a dir/A dir/B/re dir/abc/129 dir/abc" "-a dir/A dir/B/xx dir/abc/129 xxx"
+	 "-r " "-r xxx" "dir dir" "-r dir" "-r dir xxx" "-r dir/A/fd dir/B" "-r dir/A dir/B dir/A/fd" "-r dir/A dir/B/re dir/abc/129 dir/abc" "-r dir/A dir/B/xx dir/abc/129 xxx"
+	 "-t " "-t xxx" "dir dir" "-t dir" "-t dir xxx" "-t dir/A/fd dir/B" "-t dir/A dir/B dir/A/fd" "-t dir/A dir/B/re dir/abc/129 dir/abc" "-t dir/A dir/B/xx dir/abc/129 xxx"
+	 "-n " "-n xxx" "dir dir" "-n dir" "-n dir xxx" "-n dir/A/fd dir/B" "-n dir/A dir/B dir/A/fd" "-n dir/A dir/B/re dir/abc/129 dir/abc" "-n dir/A dir/B/xx dir/abc/129 xxx"
+	 "-Rlart " "-Rlart xxx" "dir dir" "-Rlart dir" "-Rlart dir xxx" "-Rlart dir/A/fd dir/B" "-Rlart dir/A dir/B dir/A/fd" "-Rlart dir/A dir/B/re dir/abc/129 dir/abc" "-Rlart dir/A dir/B/xx dir/abc/129 xxx"
+	 "-tRlar " "-tRlar xxx" "dir dir" "-tRlar dir" "-tRlar dir xxx" "-tRlar dir/A/fd dir/B" "-tRlar dir/A dir/B dir/A/fd" "-tRlar dir/A dir/B/re dir/abc/129 dir/abc" "-tRlar dir/A dir/B/xx dir/abc/129 xxx"
+	 "-Rlrta " "-Rlrta xxx" "dir dir" "-Rlrta dir" "-Rlrta dir xxx" "-Rlrta dir/A/fd dir/B" "-Rlrta dir/A dir/B dir/A/fd" "-Rlrta dir/A dir/B/re dir/abc/129 dir/abc" "-Rlrta dir/A dir/B/xx dir/abc/129 xxx"
+	 "-Rlrtan " "-Rlrtan xxx" "dir dir" "-Rlrtan dir" "-Rlrtan dir xxx" "-Rlrtan dir/A/fd dir/B" "-Rlrtan dir/A dir/B dir/A/fd" "-Rlrtan dir/A dir/B/re dir/abc/129 dir/abc" "-Rlrtan dir/A dir/B/xx dir/abc/129 xxx"
 	 "*"
 	 "-l *"
 	 "-lR *"
 	 "-lart *"
 	 "-n *"
 	 "-l */*"
-	 "-- /*"
+	 "-- /"
+     "-- /goinfre"
+     "/bin" "-l /bin" "-r /bin" "-t /bin" "-a /bin" "-1 /bin" "-R" "-Ratlrn"
+     "/bin /var" "-l /bin /var" "-r /bin /var" "-a /bin /var" "-1 /bin /var" "-Ratlrn /var"
 	 "dir/*"
 	 "dir/*/* . dir/P"
 	 "-larR dir/*/* . dir/P"
-	 "/Desktop"
+	 "/Desktop" "/Desktop /Desktop"
 	 "//Desktop xxxx"
 	 "\"\" \"\""
 	 "''"
+     "-t /Users /bin"
 	 "-t dir/A dir/B dir/A/fd"
 	 "-r dir/A dir/B dir/A/fd"
 	 "-rt dir/A dir/B dir/A/fd"
 	 "-tr dir/A dir/B dir/A/fd"
+     "-zzz -z -zz -zz"
+     "xxx xxx xxx"
+     "xxx xx xx \"\""
 	 "-lR ."
 	 "-a" "-l" "/dev/tmp"
      "-R" "-" "/Library/" "/etc/resolv.conf"
