@@ -21,7 +21,7 @@ N=TRUE
 NORM=FALSE
 
 # Path to ft_ls
-FTLS=~/Documents/ft_ls/ls
+FTLS=~/Documents/ft_ls/ft_ls
 ROOT=$(dirname $FTLS)
 
 # Log file
@@ -89,6 +89,8 @@ fi
 # fi
 
 NORM=FALSE
+cp $FTLS $ROOT/ls
+FTLS=$ROOT/ls
 
 printf "\n"
 
@@ -302,6 +304,7 @@ fi
 printf "\n"
 
 # Cleaning
+rm -f ls
 rm -rf $DIR
 rm -rf $LOG/leak.log
 rm -rf $LOG/ft_ls.dSYM
