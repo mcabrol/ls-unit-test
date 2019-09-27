@@ -93,7 +93,7 @@ NORM=FALSE
 printf "\n"
 
 # Commands
-cmd=("" "xxx" "dir" "dir xxx" "dir/A/fd dir/B" "dir/A dir/B dir/A/fd" "dir/A dir/B/re dir/abc/129 dir/abc" "dir/A dir/B/xx dir/abc/129 xxx"
+cmd=(" " "xxx" "dir" "dir xxx" "dir/A/fd dir/B" "dir/A dir/B dir/A/fd" "dir/A dir/B/re dir/abc/129 dir/abc" "dir/A dir/B/xx dir/abc/129 xxx"
 	 "-R " "-R xxx" "-R dir" "-R dir xxx" "-R dir/A/fd dir/B" "-R dir/A dir/B dir/A/fd" "-R dir/A dir/B/re dir/abc/129 dir/abc" "-R dir/A dir/B/xx dir/abc/129 xxx"
 	 "-l " "-l xxx" "-l dir" "-l dir xxx" "-l dir/A/fd dir/B" "-l dir/A dir/B dir/A/fd" "-l dir/A dir/B/re dir/abc/129 dir/abc" "-l dir/A dir/B/xx dir/abc/129 xxx"
 	 "-a " "-a xxx" "-a dir" "-a dir xxx" "-a dir/A/fd dir/B" "-a dir/A dir/B dir/A/fd" "-a dir/A dir/B/re dir/abc/129 dir/abc" "-a dir/A dir/B/xx dir/abc/129 xxx"
@@ -103,6 +103,21 @@ cmd=("" "xxx" "dir" "dir xxx" "dir/A/fd dir/B" "dir/A dir/B dir/A/fd" "dir/A dir
 	 "-Rlart " "-Rlart xxx" "-Rlart dir" "-Rlart dir xxx" "-Rlart dir/A/fd dir/B" "-Rlart dir/A dir/B dir/A/fd" "-Rlart dir/A dir/B/re dir/abc/129 dir/abc" "-Rlart dir/A dir/B/xx dir/abc/129 xxx"
 	 "-tRlar " "-tRlar xxx" "-tRlar dir" "-tRlar dir xxx" "-tRlar dir/A/fd dir/B" "-tRlar dir/A dir/B dir/A/fd" "-tRlar dir/A dir/B/re dir/abc/129 dir/abc" "-tRlar dir/A dir/B/xx dir/abc/129 xxx"
 	 "-Rlrta " "-Rlrta xxx" "-Rlrta dir" "-Rlrta dir xxx" "-Rlrta dir/A/fd dir/B" "-Rlrta dir/A dir/B dir/A/fd" "-Rlrta dir/A dir/B/re dir/abc/129 dir/abc" "-Rlrta dir/A dir/B/xx dir/abc/129 xxx"
+	 "-Rlrtan " "-Rlrtan xxx" "-Rlrtan dir" "-Rlrtan dir xxx" "-Rlrtan dir/A/fd dir/B" "-Rlrtan dir/A dir/B dir/A/fd" "-Rlrtan dir/A dir/B/re dir/abc/129 dir/abc" "-Rlrtan dir/A dir/B/xx dir/abc/129 xxx"
+	 "*"
+	 "-l *"
+	 "-lR *"
+	 "-lart *"
+	 "-n *"
+	 "-l */*"
+	 "-- /*"
+	 "dir/*"
+	 "dir/*/* . dir/P"
+	 "-larR dir/*/* . dir/P"
+	 "/Desktop"
+	 "//Desktop xxxx"
+	 "\"\" \"\""
+	 "''"
 	 "-t dir/A dir/B dir/A/fd"
 	 "-r dir/A dir/B dir/A/fd"
 	 "-rt dir/A dir/B dir/A/fd"
@@ -174,6 +189,9 @@ mkdir $DIR/dir{1..5} $DIR/.hdir{1..5}
 touch $DIR/dir1/file{1..5} $DIR/dir1/.hfile{1..5}
 touch $DIR/.hdir1/file{1..5} $DIR/.hdir1/.hfile{1..5}
 touch $DIR/.hdir1/file{1..5} $DIR/.hdir1/.hfile{1..5}
+mkdir $DIR/abc/q
+touch $DIR/abc/q/{a..z}
+touch $DIR/abc/q/{0..500}
 touch $DIR/k && ln -s $DIR/k $DIR/symlink
 touch -amt 194010291036.32 $DIR/P
 chmod -R +a "group:_www allow list,add_file,search,add_subdirectory,delete_child,readattr,writeattr,readextattr,writeextattr,readsecurity,file_inherit,directory_inherit" $DIR/p
@@ -284,7 +302,7 @@ fi
 printf "\n"
 
 # Cleaning
-# rm -rf $DIR
+rm -rf $DIR
 rm -rf $LOG/leak.log
 rm -rf $LOG/ft_ls.dSYM
 
