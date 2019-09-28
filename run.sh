@@ -21,7 +21,7 @@ N=TRUE
 NORM=FALSE
 
 # Path to ft_ls
-FTLS=~/Documents/nt_ls/ft_ls
+FTLS=~/Documents/ft_ls/ft_ls
 ROOT=$(dirname $FTLS)
 
 # Log file
@@ -119,8 +119,6 @@ cmd=(" " "xxx" "dir" "dir dir" "dir xxx" "dir/A/fd dir/B" "dir/A dir/B dir/A/fd"
 	 "dir/*"
 	 "dir/*/* . dir/P"
 	 "-larR dir/*/* . dir/P"
-	 "/Desktop" "/Desktop /Desktop"
-	 "//Desktop xxxx"
 	 "\"\" \"\""
 	 "''"
      "-t /Users /bin"
